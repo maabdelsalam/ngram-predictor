@@ -18,7 +18,9 @@ def main():
     parser.add_argument("--train", help="Train the model")
     parser.add_argument("--predict", help="Predict next word")
     args = parser.parse_args()
+    load_dotenv(dotenv_path="config/.env")
 
+    Normalizer(os.getenv("TRAIN_RAW_DIR"),os.getenv("TRAIN_TOKENS"))
     if args.train:
         # Train logic
         pass
