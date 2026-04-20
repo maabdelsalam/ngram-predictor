@@ -3,12 +3,15 @@
 """
 Main entry point for the N-Gram Predictor.
 """
-
+import os
+from dotenv import load_dotenv
 import argparse
 
 from src.data_prep.normalizer import Normalizer
 from src.model.ngram_model import NGramModel
 from src.inference.predictor import Predictor
+
+load_dotenv()
 
 def main():
     parser = argparse.ArgumentParser(description="N-Gram Text Predictor")

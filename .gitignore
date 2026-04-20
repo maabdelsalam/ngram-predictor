@@ -22,3 +22,9 @@ MANIFEST
 data/model/
 data/processed/
 .env
+
+data/
+*.json
+__pycache__/
+*.pyc
+.env
