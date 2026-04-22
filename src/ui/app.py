@@ -3,5 +3,6 @@ class PredictorUI:
         pass
 
     def run(self):
+        print("Welcome to the N-gram Predictor!")
         # UI logic
         pass
