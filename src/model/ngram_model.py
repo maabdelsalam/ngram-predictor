@@ -98,6 +98,16 @@ class NGramModel:
         with open(model_file, 'w', encoding='utf-8') as f:
             json.dump(self.model["prob"], f)
         
+    def lookup(self, context):
+        ngram_n=int(os.getenv("NGRAM_ORDER", 3))
+        context_length = len(context.split()) +1
+        if context_length < ngram_n:
+            ngram_n = context_length
+        for n in range(ngram_n, 0, -1):
+            if context in self.model["prob"][n]:
+                return self.model["prob"][n][context]
+            context = ' '.join(context.split(' ')[1:])
+        return {}
         
 
 if __name__ == "__main__":
@@ -108,3 +118,15 @@ if __name__ == "__main__":
     ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODELS"))
     ngram_model.build_vocab(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"))
     ngram_model.build_counts_and_probabilities(os.getenv("TRAIN_TOKENS"),os.getenv("MODELS"))
+    predicted = ngram_model.lookup("the adventure <UNK>")
+    print(predicted)
+    print("-"*20)
+    predicted = dict(sorted(predicted.items(), key=lambda item: item[1], reverse=True))
+    print(predicted)
+    print("-"*20)
+    ranked = {k: v for k, v in sorted(predicted.items(), key=lambda item: item[1], reverse=True)}
+    print(ranked)
+    print("-"*20)
+    ranked_topk = dict(list(ranked.items())[:int(os.getenv("TOP_K"))])
+    print(ranked_topk)
+    print("-"*20)
