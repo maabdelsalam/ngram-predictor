@@ -21,6 +21,8 @@ def main():
     load_dotenv(dotenv_path="config/.env")
 
     Normalizer(os.getenv("TRAIN_RAW_DIR"),os.getenv("TRAIN_TOKENS"))
+    ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODELS"))
+
     if args.train:
         # Train logic
         pass

@@ -49,8 +49,20 @@ class Normalizer:
         return text.lower()
     
     def remove_punctuation(self,text):
-        # Remove punctuation from the text, including Unicode punctuation
-        return ''.join(c for c in text if not unicodedata.category(c).startswith('P'))
+        # Remove punctuation from the text, ensuring spaces where needed
+        result = []
+        i = 0
+        while i < len(text):
+            c = text[i]
+            if unicodedata.category(c).startswith('P'):
+                # If next character exists and is not a space, replace with space
+                if i + 1 < len(text) and text[i + 1] != ' ':
+                    result.append(' ')
+                # Otherwise, remove the punctuation (don't append)
+            else:
+                result.append(c)
+            i += 1
+        return ''.join(result)
 
     def remove_numbers(self,text):
         # Remove numbers from the text
@@ -89,6 +101,11 @@ class Normalizer:
     
     def save(self, sentences,output_path):
         # Save the normalized sentences to a file
+        # Ensure the output directory exists
+        output_dir = os.path.dirname(output_path)
+        if output_dir and not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        
         tokens_per_sentence = []
         for sentence in sentences:
             normalized = self.normalize(sentence)
