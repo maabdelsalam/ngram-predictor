@@ -6,13 +6,17 @@ import unicodedata
 from dotenv import load_dotenv
 
 class Normalizer:
-    def __init__(self, input_path, output_path):
+    def __init__(self, input_path=None, output_path=None):
+        texts=""
+        if input_path and output_path:
+            self.init_norm(input_path, output_path)
+        
+
+    def init_norm(self, input_path, output_path):
         texts=self.load(input_path)
         strip_text = self.strip_gutenberg(texts)
         sentences = self.sentence_tokenize(strip_text)
         self.save(sentences,output_path)
-
-
 
     def load(self,folder_path):
         # Load all text files from the specified folder
