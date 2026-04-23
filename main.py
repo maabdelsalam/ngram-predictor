@@ -3,7 +3,7 @@
 """
 Main entry point for the N-Gram Predictor.
 """
-import sys
+
 import os
 from dotenv import load_dotenv
 import argparse
