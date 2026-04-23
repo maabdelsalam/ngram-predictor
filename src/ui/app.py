@@ -13,6 +13,7 @@ from data_prep.normalizer import Normalizer
 from inference.predictor import Predictor
 
 class PredictorUI:
+    ''' The PredictorUI class is responsible for providing a user interface for the N-Gram Predictor application using Streamlit. It includes methods for running the UI, preparing data, training the model, and making predictions. The run method sets up the Streamlit interface, allowing users to input text and receive predictions for the next word. It also includes buttons for triggering data preparation and model training processes. The class handles user interactions and displays results or error messages as needed, providing a seamless experience for users to interact with the n-gram predictor.'''
     def __init__(self):
         pass
 
@@ -44,12 +45,15 @@ class PredictorUI:
             
         
     def prepare_data(self):
+        ''' The prepare_data method initializes the Normalizer class with the specified training raw directory and token file. This method is responsible for preparing the data by normalizing the raw text data and saving the tokenized output to a file. It serves as a crucial step in the data preparation process, ensuring that the input data is in the correct format for model training. The method can be triggered from the UI to allow users to easily prepare their data before training the model.'''
         normalizer = Normalizer(os.getenv("TRAIN_RAW_DIR"), os.getenv("TRAIN_TOKENS"))
 
     def train_model(self):
+        ''' The train_model method initializes the NGramModel class with the specified token file, vocabulary file, and model file. It calls the init_model method to build the vocabulary and count/probability tables for the n-grams, effectively training the model. This method can be triggered from the UI to allow users to easily train their model after preparing the data. It ensures that the model is built and ready for making predictions based on the prepared data.'''
         ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODEL"))
 
     def predict_next(self, text):
+        ''' The predict_next method takes the input text, initializes the Normalizer and NGramModel classes, loads the model and vocabulary, and uses the Predictor class to generate predictions for the next word. It normalizes the input text, maps out-of-vocabulary words to <UNK>, and retrieves the probability distribution for the next word based on the n-gram model. The method returns the top-k predicted next words, handling cases where predictions may be empty by backing off to lower n-gram orders until it reaches unigrams or finds predictions. This method is essential for providing the core functionality of generating predictions based on user input in the UI.'''
         normalizer = Normalizer()
         ngram_model = NGramModel()
         ngram_model.load(os.getenv("MODEL"), os.getenv("VOCAB"))

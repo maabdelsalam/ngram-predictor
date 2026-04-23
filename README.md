@@ -1,7 +1,7 @@
 # N-Gram Predictor
 
 This project implements an N-Gram model for text prediction.
-## Project File Paths
+## Setup
 TRAIN_RAW_DIR=data/raw/train/\
 EVAL_RAW_DIR=data/raw/eval/\
 TRAIN_TOKENS=data/processed/train_tokens.txt\

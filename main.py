@@ -14,6 +14,7 @@ from src.inference.predictor import Predictor
 load_dotenv()
 
 def main():
+    ''' The main function serves as the entry point for the N-Gram Predictor application. It uses argparse to allow users to specify which step of the process they want to execute: data preparation, model training, inference, or all steps. Based on the user's choice, it initializes the necessary components (Normalizer, NGramModel, Predictor) and executes the corresponding functions. The function also includes error handling for keyboard interrupts to allow for graceful exits during execution. This modular approach allows users to run specific parts of the pipeline without needing to execute the entire process each time.'''
     parser = argparse.ArgumentParser(description="N-Gram Text Predictor")
     #parser.add_argument("--train", help="Train the model")
     #parser.add_argument("--predict", help="Predict next word")
