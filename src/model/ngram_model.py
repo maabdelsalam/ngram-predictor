@@ -4,6 +4,7 @@ import json
 import copy
 from dotenv import load_dotenv
 
+''' The NGramModel class is designed to build an n-gram language model from a given tokenized text file. It constructs a vocabulary based on the frequency of tokens, builds count and probability tables for n-grams up to a specified order, and provides a lookup method to retrieve the probability distribution for the next word given a context. The model can be saved to and loaded from files, allowing for reuse without needing to rebuild the model from scratch each time. The class also handles cases where the model or vocabulary files are missing by raising appropriate exceptions.'''
 class NGramModel:
     def __init__(self,token_file=None,vocab_file=None,model_file=None):
         
@@ -15,10 +16,12 @@ class NGramModel:
         # self.build_vocab(token_file,vocab_file)
         # self.build_counts_and_probabilities(token_file,model_file)
 
+    ''' The init_model method orchestrates the entire model building process by first building the vocabulary from the token file and then constructing the count and probability tables for the n-grams. It takes the paths for the token file, vocabulary file, and model file as input and calls the respective methods to perform each step. This allows for a streamlined initialization of the model when all necessary files are provided.'''
     def init_model(self, token_file,vocab_file,model_file):
         self.build_vocab(token_file,vocab_file)
         self.build_counts_and_probabilities(token_file,model_file)
 
+    ''' The build_vocab method reads the tokenized text file, counts the frequency of each token, and builds a vocabulary based on a specified threshold for unknown tokens. It saves the resulting vocabulary to a JSON file. The method also checks for the existence of the token file and handles cases where the output vocabulary file already exists by issuing a warning before overwriting it. The vocabulary is filtered to include only tokens that meet the frequency threshold, and a special <UNK> token is added to represent out-of-vocabulary words.'''
     def build_vocab(self, token_file,vocab_file):
         # Implement vocabulary building logic
         self.vocab = {}
@@ -48,7 +51,7 @@ class NGramModel:
         with open(vocab_file, 'w', encoding='utf-8') as f:
             json.dump(self.vocab, f)
       
-
+    ''' The build_counts_and_probabilities method constructs the count and probability tables for n-grams up to the specified order. It reads the tokenized text file, counts the occurrences of each n-gram, and then converts these counts into probabilities by normalizing them. The resulting probability tables are saved to a JSON file. The method also checks for the existence of the token file and handles cases where the output model file already exists by issuing a warning before overwriting it. This method is crucial for enabling the model to make predictions based on the learned n-gram probabilities.'''
     def build_counts_and_probabilities(self,token_file,model_file):
         ngram_n=self.n
         
@@ -104,6 +107,7 @@ class NGramModel:
         with open(model_file, 'w', encoding='utf-8') as f:
             json.dump(self.model["prob"], f)
         
+    ''' The lookup method takes a context string as input and retrieves the probability distribution for the next word based on the n-gram model. It checks for the presence of the context in the probability tables starting from the highest n-gram order down to unigrams, applying backoff if necessary. If no predictions are found for any n-gram order, it returns an empty dictionary. This method is essential for generating predictions based on the learned n-gram probabilities.'''
     def lookup(self, context):
         ngram_n=self.n
         context_length = len(context.split()) +1
@@ -111,10 +115,15 @@ class NGramModel:
             ngram_n = context_length
         for n in range(ngram_n, 0, -1):
             if context in self.model["prob"][str(n)]:
-                return self.model["prob"][str(n)][context]
+                #remove <UNK> from the predictions
+                predictions = self.model["prob"][str(n)][context]
+                predictions = {k: v for k, v in predictions.items() if k != '<UNK>'}
+                if predictions:
+                    return predictions
             context = ' '.join(context.split(' ')[1:])
         return {}
-        
+
+    ''' The load method reads the model and vocabulary from specified files and loads them into the NGramModel instance. It checks for the existence of the model and vocabulary files and raises exceptions if they are not found, prompting the user to run the model training process. The method initializes the model's count and probability dictionaries and populates them with the data from the loaded files, allowing the model to be used for predictions without needing to rebuild it from scratch.''' 
     def load(self, model_path,vocab_path):
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model file '{model_path}' not found. Please Run Model Training")
