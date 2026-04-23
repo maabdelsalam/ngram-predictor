@@ -57,13 +57,13 @@ class PredictorUI:
         predictions = predictor.predict_next(text, int(os.getenv("TOP_K")))
         # st.write(f"Raw predictions (including <UNK>): {predictions}")
         #remove <unk> token from predictions
-        predictions = [pred for pred in predictions if pred != '<UNK>'] 
-        # st.write(f"Predictions after removing <UNK>: {predictions}")
-        #while predicctions is empty try again with lower ngram order until we get predictions or reach unigram
-        while not predictions and ngram_model.n > 1:
-            ngram_model.n -= 1
-            predictions = predictor.predict_next(text, int(os.getenv("TOP_K")))
-            predictions = [pred for pred in predictions if pred != '<UNK>']
+        # predictions = [pred for pred in predictions if pred != '<UNK>'] 
+        # # st.write(f"Predictions after removing <UNK>: {predictions}")
+        # #while predicctions is empty try again with lower ngram order until we get predictions or reach unigram
+        # while not predictions and ngram_model.n > 1:
+        #     ngram_model.n -= 1
+        #     predictions = predictor.predict_next(text, int(os.getenv("TOP_K")))
+        #     predictions = [pred for pred in predictions if pred != '<UNK>']
         return predictions
         
 

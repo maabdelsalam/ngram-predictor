@@ -43,7 +43,16 @@ class Predictor:
         sorted_predictions = dict(sorted(prob_dist.items(), key=lambda item: item[1], reverse=True))
         if top_k > len(sorted_predictions):
             top_k = len(sorted_predictions)
-        return list(sorted_predictions.keys())[:top_k]
+        
+        predictions = list(sorted_predictions.keys())[:top_k]
+        predictions = [pred for pred in predictions if pred != '<UNK>'] 
+        # st.write(f"Predictions after removing <UNK>: {predictions}")
+        #while predicctions is empty try again with lower ngram order until we get predictions or reach unigram
+        while not predictions and self.model.n > 1:
+            self.model.n -= 1
+            predictions = self.predict_next(text, int(os.getenv("TOP_K")))
+            predictions = [pred for pred in predictions if pred != '<UNK>']
+        return predictions
         #return dict(list(sorted_predictions.items())[:top_k])
     
 if __name__ == "__main__":
