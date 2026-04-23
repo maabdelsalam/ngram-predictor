@@ -47,12 +47,12 @@ class PredictorUI:
         normalizer = Normalizer(os.getenv("TRAIN_RAW_DIR"), os.getenv("TRAIN_TOKENS"))
 
     def train_model(self):
-        ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODELS"))
+        ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODEL"))
 
     def predict_next(self, text):
         normalizer = Normalizer()
         ngram_model = NGramModel()
-        ngram_model.load(os.getenv("MODELS"), os.getenv("VOCAB"))
+        ngram_model.load(os.getenv("MODEL"), os.getenv("VOCAB"))
         predictor = Predictor(ngram_model, normalizer)
         predictions = predictor.predict_next(text, int(os.getenv("TOP_K")))
         # st.write(f"Raw predictions (including <UNK>): {predictions}")

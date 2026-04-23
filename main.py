@@ -31,13 +31,13 @@ def main():
             
         if args.step in ["model"]:
             print("\nStarting Model Training...")
-            ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODELS"))
+            ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODEL"))
             print("\nModel Training Done...")
             
         if args.step in ["inference"]:
             normalizer = Normalizer()
             ngram_model = NGramModel()
-            ngram_model.load(os.getenv("MODELS"), os.getenv("VOCAB"))
+            ngram_model.load(os.getenv("MODEL"), os.getenv("VOCAB"))
             predictor = Predictor(ngram_model, normalizer)
             while True:
                 try:
@@ -54,7 +54,7 @@ def main():
         if args.step in ["all"]:
             print("\nStarting Data Preparation and Model Training...")
             normalizer = Normalizer(os.getenv("TRAIN_RAW_DIR"), os.getenv("TRAIN_TOKENS"))
-            ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODELS"))
+            ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODEL"))
             predictor = Predictor(ngram_model, normalizer)
             print("\nData Prep and Model Training Done...")
             while True:
@@ -76,7 +76,7 @@ def main():
     ''' if args.step in ["dataprep", "all"]:
         normalizer = Normalizer(os.getenv("TRAIN_RAW_DIR"), os.getenv("TRAIN_TOKENS"))
     if args.step in ["model", "all"]:
-        ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODELS"))
+        ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODEL"))
     if args.step in ["inference", "all"]:
         predictor = Predictor(ngram_model, normalizer)
         predictions = predictor.predict_next("the adventure of", int(os.getenv("TOP_K")))
