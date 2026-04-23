@@ -25,10 +25,12 @@ def main():
     try:
             
         if args.step in ["dataprep"]:
+            print("\nStarting Data Preparation...")
             normalizer = Normalizer(os.getenv("TRAIN_RAW_DIR"), os.getenv("TRAIN_TOKENS"))
             print("\nData Prep Done...")
             
         if args.step in ["model"]:
+            print("\nStarting Model Training...")
             ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODELS"))
             print("\nModel Training Done...")
             
@@ -50,6 +52,7 @@ def main():
                     break
 
         if args.step in ["all"]:
+            print("\nStarting Data Preparation and Model Training...")
             normalizer = Normalizer(os.getenv("TRAIN_RAW_DIR"), os.getenv("TRAIN_TOKENS"))
             ngram_model = NGramModel(os.getenv("TRAIN_TOKENS"), os.getenv("VOCAB"), os.getenv("MODELS"))
             predictor = Predictor(ngram_model, normalizer)

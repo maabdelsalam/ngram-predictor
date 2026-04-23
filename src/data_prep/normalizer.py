@@ -21,6 +21,10 @@ class Normalizer:
     def load(self,folder_path):
         # Load all text files from the specified folder
         texts = ""
+        if not os.path.exists(folder_path):
+            raise FileNotFoundError(f"Input folder '{folder_path}' not found. Please check the path and try again.")
+        if not os.listdir(folder_path):
+            raise FileNotFoundError(f"Input folder '{folder_path}' is empty. Please add text files and try again.")
         for name in os.listdir(folder_path):
             if name.endswith(".txt"):
                 with open(os.path.join(folder_path, name), 'r', encoding='utf-8') as file:

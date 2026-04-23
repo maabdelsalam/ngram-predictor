@@ -22,19 +22,21 @@ class PredictorUI:
         st.write("Enter your input text and click the button to get predictions for the next word.")
         user_input = st.text_input("Input Text")
         if user_input:
-            predictions = self.predict_next(user_input)
             # if an error occus display message
             try:
+                predictions = self.predict_next(user_input)
                 st.write("Predicted Next Words:")
                 st.write(str(predictions))
             except Exception as e:
-                st.error(f"Error occurred while predicting next words. Please ensure the model is trained and loaded correctly. Error details: {str(e)}")
-        if st.sidebar.button("Data Preparation"):
+                st.error(f"Error occurred while predicting next words. Please ensure the model is trained and loaded correctly.")
+        if st.button("Data Preparation"):
             # Call the data preparation function and display results
+            st.write("Starting data preparation...")
             self.prepare_data()
             st.write("Data preparation completed.")
-        if st.sidebar.button("Train Model"):
+        if st.button("Train Model"):
             # Call the model training function and display results
+            st.write("Starting model training...")
             self.train_model()
             st.write("Model training completed.")
         #if st.button("Predict Next Word"):
