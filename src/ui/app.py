@@ -4,8 +4,7 @@ import sys
 
 from dotenv import load_dotenv
 import streamlit as st
-import pandas as pd
-import numpy as np
+
 import os   
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(project_root)
