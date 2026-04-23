@@ -9,6 +9,7 @@ class NGramModel:
         
         self.model = {}
         self.vocab = {}
+        self.n = int(os.getenv("NGRAM_ORDER", 3))
         if token_file and vocab_file and model_file:
             self.init_model(token_file,vocab_file,model_file)
         # self.build_vocab(token_file,vocab_file)
@@ -49,7 +50,7 @@ class NGramModel:
       
 
     def build_counts_and_probabilities(self,token_file,model_file):
-        ngram_n=int(os.getenv("NGRAM_ORDER", 3))
+        ngram_n=self.n
         
         self.model["count"]={}
         self.model["prob"]={}
@@ -104,7 +105,7 @@ class NGramModel:
             json.dump(self.model["prob"], f)
         
     def lookup(self, context):
-        ngram_n=int(os.getenv("NGRAM_ORDER", 3))
+        ngram_n=self.n
         context_length = len(context.split()) +1
         if context_length < ngram_n:
             ngram_n = context_length

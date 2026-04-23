@@ -13,16 +13,17 @@ class Predictor:
     def __init__(self, model,normalizer):
         self.model = model
         self.normalizer = normalizer
+        self.n = int(os.getenv("NGRAM_ORDER", 3))
 
     def normalize_input(self, text):
         # Implement input normalization logic using the Normalizer class
         text_norm=self.normalizer.normalize(text)
         context_length = len(text_norm.split())
-        if context_length < int(os.getenv("NGRAM_ORDER", 3)):
+        if context_length < self.n:
             return text_norm
         else:
             #return the last N-1 tokens of the normalized text as context for prediction
-            return ' '.join(text_norm.split()[-(int(os.getenv("NGRAM_ORDER", 3))-1):])
+            return ' '.join(text_norm.split()[-(self.n-1):])
 
     
     def map_oov(self, context):
